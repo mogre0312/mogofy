@@ -1,6 +1,7 @@
-from flask import Flask
+from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+from flask_bcrypt import generate_password_hash, check_password_hash
 
 db = SQLAlchemy()
 app = Flask(__name__)
@@ -70,7 +71,41 @@ class Order_Item(db.Model):
 
 with app.app_context():
     db.create_all()
+
+@app.route('/register', methods=['POST'])
+def register():
+    payload = request.json
+    username = payload.get('username')
+    password = generate_password_hash(payload.get('password', '')).decode("utf8")
+    role = payload.get('role', 'user')
     
+    if len(username)>50:
+        return 'Username is too long'
+    
+    user = User(
+        username = username,
+        password = password,
+        role = role
+    )
+    db.session.add(user)
+    db.session.commit()
+    return 'User created'
+
+@app.route('/login', methods=['POST'])
+def login():
+    payload = request.json
+    username = payload.get('username', '')
+    password = payload.get('password', '')
+    user = User.query.filter_by(username=username).first()
+    
+    if user is None:
+        return 'User not found'
+    
+    if check_password_hash(user.password, password) == True:
+        return 'Login Success'
+    else:
+        return 'Incorrect Password'
+
     
 if __name__ == 'main':
     app.run(debug=True)
