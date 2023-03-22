@@ -152,6 +152,34 @@ def update_product(id):
         return 'Product updated'
     else:
         return 'Product not found'
+    
+
+@app.route('/colors', methods=['POST'])
+def add_newcolor():
+    payload = request.json
+    title = payload.get('title','')
+
+    color = Color(
+        title = title
+    )
+
+    db.session.add(color)
+    db.session.commit()
+    return 'Color Added'
+
+
+@app.route('/size', methods=['POST'])
+def add_newsize():
+    payload = request.json
+    title = payload.get('title','')
+
+    size = Size(
+        title = title
+    )
+
+    db.session.add(size)
+    db.session.commit()
+    return 'Size Added'
 
              
     
