@@ -53,7 +53,7 @@ class Order(db.Model):
     __tablename__='order'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    coupon_code = db.Column(db.String(10), nullable=False)
+    coupon_code = db.Column(db.String(10), nullable=True)
     total = db.Column(db.Float(precision=2), default = 0)
     order_date = db.Column(db.DateTime, default=datetime.date)
     order_time = db.Column(db.DateTime, default=datetime.time)
@@ -106,6 +106,54 @@ def login():
     else:
         return 'Incorrect Password'
 
+@app.route('/products', methods=['POST'])
+def add_newproduct():
+    payload = request.json
+    title = payload.get('title','')
+    description = payload.get('description','')
+    price = payload.get('price','')
+
+    user = Product(
+        title = title,
+        description = description,
+        price = price
+    )
+
+    db.session.add(user)
+    db.session.commit()
+    return 'Product Added'
+
+@app.route('/products/<int:id>', methods=['GET'])
+def show_product(id):
+    product = Product.query.filter_by(id=id).first()
+    
+    if product is None:
+        return 'Product not found'
+    else:
+        return {
+            'title': product.title,
+            'description':product.description,
+            'price':product.price
+        }
+    
+@app.route('/products/<int:id>', methods =['PUT',"PATCH"])
+def update_product(id):
+    payload = request.json
+    title = payload.get('title','')
+    description = payload.get('description','')
+    price = payload.get('price','')
+    product = Product.query.filter_by(id=id).first()
+    
+    if product is not None:
+        product.title= title
+        product.description = description
+        product.price= price
+        db.session.commit()
+        return 'Product updated'
+    else:
+        return 'Product not found'
+
+             
     
 if __name__ == 'main':
     app.run(debug=True)
