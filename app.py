@@ -8,6 +8,18 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///mogofy.db"
 db.init_app(app)
 
+
+product_color= db.Table('product_color',
+                        db.Column('product_id', db.Integer, db.ForeignKey('product.id')),
+                        db.Column('color_id', db.Integer, db.ForeignKey('color.id'))
+                        )
+
+product_size= db.Table('product_size',
+                        db.Column('product_id', db.Integer, db.ForeignKey('product.id')),
+                        db.Column('size_id', db.Integer, db.ForeignKey('size.id'))
+                        )
+
+
 class User(db.Model):
     __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
@@ -47,7 +59,7 @@ class Size(db.Model):
     __tablename__='size'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(10), nullable=False)
-    
+        
 
 class Order(db.Model):
     __tablename__='order'
@@ -67,6 +79,7 @@ class Order_Item(db.Model):
     quantity = db.Column(db.Integer)
     color_id = db.Column(db.Integer, db.ForeignKey('color.id'))
     size_id = db.Column(db.Integer, db.ForeignKey('size.id'))
+
 
 
 with app.app_context():
@@ -181,7 +194,7 @@ def add_newsize():
     db.session.commit()
     return 'Size Added'
 
-             
+            
     
 if __name__ == 'main':
     app.run(debug=True)
