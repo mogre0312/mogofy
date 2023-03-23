@@ -1,0 +1,166 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "Mogofy",
+    "dateExported": "2023-03-23T12:11:42.088Z",
+    "version": "1.1",
+    "folders": [
+        {
+            "_id": "06b48b57-c666-464b-a411-61c7dd2a5733",
+            "name": "Products",
+            "containerId": "",
+            "created": "2023-03-22T12:17:58.965Z",
+            "sortNum": 10000
+        },
+        {
+            "_id": "e0d7651f-3c0e-4619-a1a1-11ad67274387",
+            "name": "User",
+            "containerId": "",
+            "created": "2023-03-22T12:32:45.177Z",
+            "sortNum": 20000
+        },
+        {
+            "_id": "a62fd4e1-fd0c-4c0a-9940-af1d84cc97a8",
+            "name": "Color",
+            "containerId": "",
+            "created": "2023-03-22T13:32:37.901Z",
+            "sortNum": 30000
+        },
+        {
+            "_id": "fe16608d-dd5d-4a11-bb03-eded93c81604",
+            "name": "Size",
+            "containerId": "",
+            "created": "2023-03-22T13:35:17.863Z",
+            "sortNum": 40000
+        }
+    ],
+    "requests": [
+        {
+            "_id": "cbbf8a31-61ab-4454-927d-c35c426253f7",
+            "colId": "cb1bb48f-a5bc-4476-9d7f-ac3a1df5e071",
+            "containerId": "e0d7651f-3c0e-4619-a1a1-11ad67274387",
+            "name": "Register",
+            "url": "http://localhost:5000/register",
+            "method": "POST",
+            "sortNum": 30000,
+            "created": "2023-03-22T12:33:08.822Z",
+            "modified": "2023-03-22T12:39:42.780Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"username\":\"Mogre\",\n  \"password\":\"1234\",\n  \"role\":\"user\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "0a17afab-a18e-4245-aac1-6c7632c951bc",
+            "colId": "cb1bb48f-a5bc-4476-9d7f-ac3a1df5e071",
+            "containerId": "e0d7651f-3c0e-4619-a1a1-11ad67274387",
+            "name": "Login",
+            "url": "http://localhost:5000/login",
+            "method": "POST",
+            "sortNum": 40000,
+            "created": "2023-03-22T12:33:16.014Z",
+            "modified": "2023-03-22T12:43:54.285Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"username\":\"Mogre\",\n  \"password\":\"1234\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "0710b0b7-b590-4748-9abf-cd395228a96e",
+            "colId": "cb1bb48f-a5bc-4476-9d7f-ac3a1df5e071",
+            "containerId": "06b48b57-c666-464b-a411-61c7dd2a5733",
+            "name": "Add New product",
+            "url": "http://localhost:5000/products",
+            "method": "POST",
+            "sortNum": 50000,
+            "created": "2023-03-22T12:57:25.971Z",
+            "modified": "2023-03-22T13:22:47.722Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"title\":\"Shirts\",\n  \"description\":\"Formal Shirts\",\n  \"price\":599.00\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "6dd4ef93-6a06-495c-ae76-5a2b040281bc",
+            "colId": "cb1bb48f-a5bc-4476-9d7f-ac3a1df5e071",
+            "containerId": "06b48b57-c666-464b-a411-61c7dd2a5733",
+            "name": "Get single product",
+            "url": "http://localhost:5000/products/1",
+            "method": "GET",
+            "sortNum": 60000,
+            "created": "2023-03-22T13:11:56.306Z",
+            "modified": "2023-03-22T13:12:13.778Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "e7b28695-3a86-4f77-8bc3-ee23ace70900",
+            "colId": "cb1bb48f-a5bc-4476-9d7f-ac3a1df5e071",
+            "containerId": "06b48b57-c666-464b-a411-61c7dd2a5733",
+            "name": "Update Product",
+            "url": "http://localhost:5000/products/2",
+            "method": "PUT",
+            "sortNum": 70000,
+            "created": "2023-03-22T13:19:45.331Z",
+            "modified": "2023-03-22T13:23:03.745Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"title\":\"Shirts\",\n  \"description\":\"Formal Shirts\",\n  \"price\":1000.00\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "7fe59261-0955-45c0-8ba0-7bcac6622fe5",
+            "colId": "cb1bb48f-a5bc-4476-9d7f-ac3a1df5e071",
+            "containerId": "a62fd4e1-fd0c-4c0a-9940-af1d84cc97a8",
+            "name": "Add New color",
+            "url": "http://localhost:5000/colors",
+            "method": "POST",
+            "sortNum": 80000,
+            "created": "2023-03-22T13:32:47.940Z",
+            "modified": "2023-03-22T13:33:56.995Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"title\":\"Black\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "1f863313-4ee2-4d35-ac50-c6b9266c5657",
+            "colId": "cb1bb48f-a5bc-4476-9d7f-ac3a1df5e071",
+            "containerId": "fe16608d-dd5d-4a11-bb03-eded93c81604",
+            "name": "Add new size",
+            "url": "http://localhost:5000/size",
+            "method": "POST",
+            "sortNum": 90000,
+            "created": "2023-03-22T13:35:40.988Z",
+            "modified": "2023-03-22T13:36:31.494Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"title\":\"M\"\n}",
+                "form": []
+            },
+            "tests": []
+        }
+    ]
+}
