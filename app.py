@@ -39,6 +39,8 @@ class Product(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     deleted_at = db.Column(db.DateTime, nullable=True)
+    colors = db.relationship('Color', secondary=product_color, backref='products')
+    sizes = db.relationship('Size', secondary=product_size, backref='product')
     
 
 class Coupon(db.Model):
@@ -146,7 +148,9 @@ def show_product(id):
         return {
             'title': product.title,
             'description':product.description,
-            'price':product.price
+            'price':product.price,
+            'colors':[x.title for x in product.colors],
+            'sizes':[x.title for x in product.sizes]
         }
     
 @app.route('/products/<int:id>', methods =['PUT',"PATCH"])
@@ -194,7 +198,32 @@ def add_newsize():
     db.session.commit()
     return 'Size Added'
 
-            
+@app.route('/product_color', methods =['POST'])
+def product_color():
+    payload = request.json
+    product_id = payload.get('product_id','')
+    colors = payload.get('colors','')
+    
+    product = Product.query.filter_by(id=product_id).first()
+    for x in colors:
+        color = Color.query.filter_by(id=x).first()
+        if color is not None:
+            product.colors.append(color)
+        
+    db.session.commit()
+    return 'color attached'
+
+@app.route('/product_size', methods=['POST'])
+def product_size():
+    payload= request.json
+    product_id = payload.get('product_id','')
+    sizes = payload.get('sizes_id','')
+    
+    product = Product.query.filter_by(id=product_id).first()
+    size = Size.query.filter_by(id=1).first()
+    product.sizes.append(size)
+    db.session.commit()
+    return 'Size attached'
     
 if __name__ == 'main':
     app.run(debug=True)
