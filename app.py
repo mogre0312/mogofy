@@ -69,9 +69,8 @@ class Order(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     coupon_code = db.Column(db.String(10), nullable=True)
     total = db.Column(db.Float(precision=2), default = 0)
-    order_date = db.Column(db.DateTime, default=datetime.date)
-    order_time = db.Column(db.DateTime, default=datetime.time)
-    cancelled_at = db.Column(db.DateTime, default=datetime.utcnow)
+    ordered_at = db.Column(db.DateTime, default=datetime.utcnow)
+    cancelled_at = db.Column(db.DateTime, nullable=True)
     
 class Order_Item(db.Model):
     __tablename__='order_item'
@@ -255,6 +254,38 @@ def product_size():
             
     db.session.commit()
     return 'Size attached'
+
+
+@app.route('/orders', methods = ['POST'])
+def create_order():
+    payload = request.json
+    user_id = payload.get('user_id', '')
+    products = payload.get('products', [])
+    user = User.query.filter_by(id=user_id).first()
+    if user is None:
+        return 'User not found'
     
+    product_list= list()
+    total = 0.0
+    for item in products:
+        product = Product.query.filter_by(id=item['product_id']).first()
+        # product is found
+        if product is not None:
+              product_list.append(product)
+              total += product.price * item['quantity']
+              
+              
+    order = Order(
+        user_id = user_id,
+        total = total
+    )
+    db.session.add(order)
+    db.session.commit()
+    print(order)
+    
+    return 'Order Created'
+    
+    
+        
 if __name__ == 'main':
     app.run(debug=True)
