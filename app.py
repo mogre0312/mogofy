@@ -184,6 +184,19 @@ def add_newcolor():
     db.session.commit()
     return 'Color Added'
 
+@app.route('/colors/<int:id>', methods =['PUT', 'PATCH'])
+def update_color(id):
+    payload = request.json
+    title = payload.get('title', '')
+    color = Color.query.filter_by(id=id).first()
+    
+    if color is not None:
+        color.title = title
+        db.session.commit()
+        return 'Color updated'
+    else:
+        return 'Color not found' 
+
 
 @app.route('/size', methods=['POST'])
 def add_newsize():
@@ -198,6 +211,20 @@ def add_newsize():
     db.session.commit()
     return 'Size Added'
 
+@app.route('/size/<int:id>', methods =['PUT', 'PATCH'])
+def update_size(id):
+    payload = request.json
+    title = payload.get('title', '')
+    size = Size.query.filter_by(id=id).first()
+    
+    if size is not None:
+        size.title = title
+        db.session.commit()
+        return 'Size updated'
+    else:
+        return 'Size not found'
+    
+
 @app.route('/product_color', methods =['POST'])
 def product_color():
     payload = request.json
@@ -207,6 +234,7 @@ def product_color():
     product = Product.query.filter_by(id=product_id).first()
     for x in colors:
         color = Color.query.filter_by(id=x).first()
+        #if color is not found in database, do not append
         if color is not None:
             product.colors.append(color)
         
@@ -220,8 +248,11 @@ def product_size():
     sizes = payload.get('sizes_id','')
     
     product = Product.query.filter_by(id=product_id).first()
-    size = Size.query.filter_by(id=1).first()
-    product.sizes.append(size)
+    for x in sizes:
+        size = Size.query.filter_by(id=1).first()
+        if size is not None:
+            product.sizes.append(size)
+            
     db.session.commit()
     return 'Size attached'
     
