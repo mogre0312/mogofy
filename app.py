@@ -265,27 +265,59 @@ def create_order():
     if user is None:
         return 'User not found'
     
-    product_list= list()
     total = 0.0
     for item in products:
         product = Product.query.filter_by(id=item['product_id']).first()
         # product is found
         if product is not None:
-              product_list.append(product)
               total += product.price * item['quantity']
-              
-              
+    
+    #adding order          
     order = Order(
         user_id = user_id,
         total = total
     )
     db.session.add(order)
-    db.session.commit()
-    print(order)
+    db.session.commit()  
+    
+    # adding order_items
+    for item in products:
+        order_item = Order_Item(
+            order_id = order.id,
+            product_id = item['product_id'],
+            quantity = item['quantity'],
+            color_id = item['color_id'],
+            size_id = item['size_id']
+        )
+        db.session.add(order_item)
+    
+    db.session.commit()  
     
     return 'Order Created'
+
+@app.route('/orders/<int:id>', methods = ['GET'])
+def show_order(id):
+    order = Order.query.filter_by(id=id).first()
     
-    
-        
+    if order is None:
+        return 'Order not found'
+    else:
+        order_items = Order_Item.query.filter_by(order_id=id).all()
+        print(order_items)
+        items = []
+        for x in order_items:
+            items.append({
+                'product_id':x.product_id,
+                'quantity':x.quantity,
+                'color_id':x.color_id,
+                'size_id':x.size_id
+            })
+        return {
+            'user_id':order.user_id,
+            'total':order.total,
+            'ordered_at':order.ordered_at,
+            'items':items
+        }
+                
 if __name__ == 'main':
     app.run(debug=True)
