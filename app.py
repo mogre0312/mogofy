@@ -224,8 +224,8 @@ def update_size(id):
         return 'Size not found'
     
 
-@app.route('/product_color', methods =['POST'])
-def product_color():
+@app.route('/colors_on_product', methods =['POST'])
+def colors_on_product():
     payload = request.json
     product_id = payload.get('product_id','')
     colors = payload.get('colors','')
@@ -238,10 +238,10 @@ def product_color():
             product.colors.append(color)
         
     db.session.commit()
-    return 'color attached'
+    return 'Colors attached'
 
-@app.route('/product_size', methods=['POST'])
-def product_size():
+@app.route('/sizes_on_product', methods=['POST'])
+def sizes_on_product():
     payload= request.json
     product_id = payload.get('product_id','')
     sizes = payload.get('sizes_id','')
@@ -253,7 +253,7 @@ def product_size():
             product.sizes.append(size)
             
     db.session.commit()
-    return 'Size attached'
+    return 'Sizes attached'
 
 
 @app.route('/orders', methods = ['POST'])
