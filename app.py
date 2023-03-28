@@ -121,7 +121,7 @@ def login():
         return 'Incorrect Password'
 
 @app.route('/products', methods=['POST'])
-def add_newproduct():
+def create_product():
     payload = request.json
     title = payload.get('title','')
     description = payload.get('description','')
@@ -171,7 +171,7 @@ def update_product(id):
     
 
 @app.route('/colors', methods=['POST'])
-def add_newcolor():
+def create_color():
     payload = request.json
     title = payload.get('title','')
 
@@ -198,7 +198,7 @@ def update_color(id):
 
 
 @app.route('/size', methods=['POST'])
-def add_newsize():
+def create_size():
     payload = request.json
     title = payload.get('title','')
 
@@ -228,9 +228,11 @@ def update_size(id):
 def colors_on_product():
     payload = request.json
     product_id = payload.get('product_id','')
-    colors = payload.get('colors','')
+    colors = payload.get('colors',[])
     
     product = Product.query.filter_by(id=product_id).first()
+    if product is None:
+        return 'Product not found'
     for x in colors:
         color = Color.query.filter_by(id=x).first()
         #if color is not found in database, do not append
@@ -244,11 +246,13 @@ def colors_on_product():
 def sizes_on_product():
     payload= request.json
     product_id = payload.get('product_id','')
-    sizes = payload.get('sizes_id','')
+    sizes = payload.get('sizes',[])
     
     product = Product.query.filter_by(id=product_id).first()
+    if product is None:
+        return 'Product not found'
     for x in sizes:
-        size = Size.query.filter_by(id=1).first()
+        size = Size.query.filter_by(id=x).first()
         if size is not None:
             product.sizes.append(size)
             
@@ -303,14 +307,23 @@ def show_order(id):
         return 'Order not found'
     else:
         order_items = Order_Item.query.filter_by(order_id=id).all()
-        print(order_items)
         items = []
         for x in order_items:
+            product = Product.query.filter_by(id=x.product_id).first()
+            size = Size.query.filter_by(id=x.size_id).first()
+            color = Color.query.filter_by(id=x.color_id).first()
             items.append({
-                'product_id':x.product_id,
+                'product':{
+                    'title':product.title,
+                    'description':product.description
+                    },
                 'quantity':x.quantity,
-                'color_id':x.color_id,
-                'size_id':x.size_id
+                'color':{
+                    'title':color.title
+                    },
+                'size':{
+                    'title':size.title
+                }
             })
         return {
             'user_id':order.user_id,
